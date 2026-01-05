@@ -1342,24 +1342,32 @@ public class WriteTag extends BasicActivity {
      * @param view
      */
     public void onWriteValueBlockTransferRestore(View view) {
-        // Validate staging
+        // Validate staging.
         if (!checkSectorAndBlock(mVtrStageSector, mVtrStageBlock)) return;
-        int sSec = Integer.parseInt(mVtrStageSector.getText().toString());
-        int sBlk = Integer.parseInt(mVtrStageBlock.getText().toString());
+        int stagingSector = Integer.parseInt(mVtrStageSector.getText().toString());
+        int stagingBlock = Integer.parseInt(mVtrStageBlock.getText().toString());
 
-        // Validate destination
+        // Validate destination.
         if (!checkSectorAndBlock(mVtrDestSector, mVtrDestBlock)) return;
-        int dSec = Integer.parseInt(mVtrDestSector.getText().toString());
-        int dBlk = Integer.parseInt(mVtrDestBlock.getText().toString());
+        int destinationSector = Integer.parseInt(mVtrDestSector.getText().toString());
+        int destinationBlock = Integer.parseInt(mVtrDestBlock.getText().toString());
 
-        // Prevent trailers and manufacturer block
-        if (sBlk == 3 || sBlk == 15 || (sSec == 0 && sBlk == 0)) {
-            Toast.makeText(this, R.string.info_error_staging_sector_trailer_block0,
+        // Prevent stage block = destination block.
+        if (stagingSector == destinationSector && stagingBlock == destinationBlock) {
+            Toast.makeText(this, R.string.info_staging_equal_destination,
                 Toast.LENGTH_LONG).show();
             return;
         }
-        if (dBlk == 3 || dBlk == 15 || (dSec == 0 && dBlk == 0)) {
-            Toast.makeText(this, R.string.info_error_destination_sector_trailer_block0,
+
+        // Prevent trailers and manufacturer block.
+        if (stagingBlock == 3 || stagingBlock == 15 || (stagingSector == 0 && stagingBlock == 0)) {
+            Toast.makeText(this, R.string.info_staging_sector_trailer_block0,
+                Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (destinationBlock == 3 || destinationBlock == 15 ||
+            (destinationSector == 0 && destinationBlock == 0)) {
+            Toast.makeText(this, R.string.info_destination_sector_trailer_block0,
                 Toast.LENGTH_LONG).show();
             return;
         }
@@ -1386,11 +1394,11 @@ public class WriteTag extends BasicActivity {
             return;
         }
 
-        if (sSec < dSec) {
-            createKeyMapForRange(sSec, dSec, CKM_VALUE_TRANSFER_RESTORE,
+        if (stagingSector < destinationSector) {
+            createKeyMapForRange(stagingSector, destinationSector, CKM_VALUE_TRANSFER_RESTORE,
                 this.getString(R.string.action_create_key_map_and_write_value_block));
         } else {
-            createKeyMapForRange(dSec, sSec, CKM_VALUE_TRANSFER_RESTORE,
+            createKeyMapForRange(destinationSector, stagingSector, CKM_VALUE_TRANSFER_RESTORE,
                 this.getString(R.string.action_create_key_map_and_write_value_block));
         }
     }
@@ -1595,47 +1603,116 @@ public class WriteTag extends BasicActivity {
         return out;
     }
 
+    /**
+     * TODO: Doc.
+     */
     private void runValueTransferRestore() {
         MCReader reader = Common.checkForTagAndCreateReader(this);
         if (reader == null) return;
 
-        int sSec = Integer.parseInt(mVtrStageSector.getText().toString());
-        int sBlk = Integer.parseInt(mVtrStageBlock.getText().toString());
-        int dSec = Integer.parseInt(mVtrDestSector.getText().toString());
-        int dBlk = Integer.parseInt(mVtrDestBlock.getText().toString());
+        int stagingSector = Integer.parseInt(mVtrStageSector.getText().toString());
+        int stagingBlock = Integer.parseInt(mVtrStageBlock.getText().toString());
+        int destinationSector = Integer.parseInt(mVtrDestSector.getText().toString());
+        int destinationBlock = Integer.parseInt(mVtrDestBlock.getText().toString());
         int value = Integer.parseInt(mVtrValue.getText().toString());
-        int addr = Integer.parseInt(mVtrAddr.getText().toString(), 16);
-        byte[] vb = encodeValueBlock(value, addr);
+        int address = Integer.parseInt(mVtrAddr.getText().toString(), 16);
+        byte[] vb = encodeValueBlock(value, address);
 
-        // try key B first, then key A
-        byte[][] ksStage = Common.getKeyMap().get(sSec);
-        byte[][] ksDest  = Common.getKeyMap().get(dSec);
+        // Do we have a key for the staging and the destination block?
+        byte[][] stagingKeys = Common.getKeyMap().get(stagingSector);
+        byte[][] destinationKeys  = Common.getKeyMap().get(destinationSector);
+        if (stagingKeys[0] == null && stagingKeys[1] == null) {
+            // No key found for staging block.
+            Toast.makeText(this, R.string.info_no_key_for_staging,
+                Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (destinationKeys[0] == null && destinationKeys[1] == null) {
+            // No key found for destination block.
+            Toast.makeText(this, R.string.info_no_key_for_destination,
+                Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Do we have write permissions to the staging block?
+        HashMap<Integer, int[]> pos = new HashMap<Integer, int[]>();
+        if (stagingSector == destinationSector) {
+            pos.put(stagingSector, new int[]{stagingBlock, destinationBlock});
+        } else {
+            pos.put(stagingSector, new int[]{stagingBlock});
+            pos.put(destinationSector, new int[]{destinationBlock});
+        }
+        HashMap<Integer, HashMap<Integer, Integer>> writable =
+            reader.isWritableOnPositions(pos,Common.getKeyMap());
+        if (writable == null || writable.get(stagingSector) == null ||
+            writable.get(stagingSector).get(stagingBlock) == null) {
+            // Authentication error. Should not happen. Exit.
+            Toast.makeText(this, R.string.text_strange_error, Toast.LENGTH_LONG).show();
+            return;
+        }
+        byte[] stagingKey = null;
+        boolean useAsKeyB = false;
+        switch (writable.get(stagingSector).get(stagingBlock)) {
+            case 1:
+                // Writable with key A.
+                if (stagingKeys[0] == null) {
+                    Toast.makeText(this, R.string.info_no_write_key_for_staging,
+                        Toast.LENGTH_LONG).show();
+                    return;
+                }
+                stagingKey = stagingKeys[0];
+                break;
+            case 2:
+                // Writable with key B.
+                if (stagingKeys[1] == null) {
+                    Toast.makeText(this, R.string.info_no_write_key_for_staging,
+                        Toast.LENGTH_LONG).show();
+                    return;
+                }
+                stagingKey = stagingKeys[1];
+                useAsKeyB = true;
+                break;
+            case 3:
+                // Writable with key A or B.
+                if (stagingKeys[1] != null) {
+                    // Prefere key B for writing.
+                    stagingKey = stagingKeys[1];
+                    useAsKeyB = true;
+                }
+                break;
+            default:
+                // Error. Should never be any other value.
+                Toast.makeText(this, R.string.info_strange_error, Toast.LENGTH_LONG);
+                return;
+        }
+
+        // Do we have dec/trans/rest permission to destination sector?
+        // TODO: [Optional] Check if we have a key with dec/trans/rest permissions for the destination sector.
+
+        // Write (try both keys for destination block).
         int result = -1;
-        int[] order = {1, 0}; // 1 == Key B, 0 == Key A
-
-        outer:
-        for (int i : order) {
-            for (int j : order) {
-                if (ksStage != null && ksDest != null && ksStage[i] != null && ksDest[j] != null) {
-                    result = reader.valueTransferRestore(
-                        sSec, sBlk, dSec, dBlk, vb,
-                        ksStage[i], (i == 1),
-                        ksDest[j],  (j == 1));
-                    if (result != -1) break outer;
+        for (int i=0; i<2; i++) {
+            if (destinationKeys[i] != null) {
+                // TODO: Test why "-1" when only key B is known for dest.
+                result = reader.valueTransferRestore(stagingSector, stagingBlock, destinationSector,
+                    destinationBlock, vb, stagingKey, useAsKeyB, destinationKeys[i], (i == 1));
+                if (result != -1) {
+                    break;
                 }
             }
         }
         reader.close();
 
+        // Check write result.
         switch (result) {
             case 2:
                 Toast.makeText(this, R.string.info_block_not_in_sector, Toast.LENGTH_LONG).show();
                 return;
             case -1:
-                Toast.makeText(this, "Error doing transfer/restore (auth/write/ops).", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.info_error_writing_value_block, Toast.LENGTH_LONG).show();
                 return;
-        }  // TODO: remove hardcoded strings
-        Toast.makeText(this, "Transfer/Restore successful.", Toast.LENGTH_LONG).show();
+        }
+        Toast.makeText(this, R.string.info_write_successful, Toast.LENGTH_LONG).show();
         finish();
     }
 

@@ -452,10 +452,16 @@
     <string name="info_backup_error">Error while creating a full backup</string>
     <string name="info_irreversible_acs">Warning: The access conditions will be irreversible</string>
     <string name="info_std_key_overwrite">Error: Standard key files can not be overwritten</string>
-    <string name="info_error_staging_sector_trailer_block0">Error: Staging block can not be
+    <string name="info_staging_equal_destination">Error: Staging and destination can not
+        be the same</string>
+    <string name="info_staging_sector_trailer_block0">Error: Staging block can not be
         sector trailer or manufacturer block</string>
-    <string name="info_error_destination_sector_trailer_block0">Error: Destination block can not
+    <string name="info_destination_sector_trailer_block0">Error: Destination block can not
         be sector trailer or manufacturer block</string>
+    <string name="info_no_key_for_staging">Error: No key found for staging block</string>
+    <string name="info_no_key_for_destination">Error: No key found for destination block</string>
+    <string name="info_no_write_key_for_staging">Error: No key with write permissions
+        found for staging block</string>
 
     <!-- Dialog messages -->
     <string name="dialog_nfc_not_enabled">The NFC adapter is not enabled.
