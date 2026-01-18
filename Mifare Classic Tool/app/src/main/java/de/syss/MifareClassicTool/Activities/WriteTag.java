@@ -1686,7 +1686,10 @@ public class WriteTag extends BasicActivity {
                 return;
         }
 
-        // Do we have dec/trans/rest permission to destination sector?
+        // Do we have restore permissions of the staging block?
+        // TODO: Important, otherwise block is written without writing back the backup.
+
+        // Do we have dec/trans/rest permission to destination block?
         // TODO: [Optional] Check if we have a key with dec/trans/rest permissions for the destination sector.
 
         // Write (try both keys for destination block).
@@ -1696,7 +1699,7 @@ public class WriteTag extends BasicActivity {
                 // TODO: Test why "-1" when only key B is known for dest.
                 result = reader.valueTransferRestore(stagingSector, stagingBlock, destinationSector,
                     destinationBlock, vb, stagingKey, useAsKeyB, destinationKeys[i], (i == 1));
-                if (result != -1) {
+                if (result == 0) {
                     break;
                 }
             }

@@ -884,9 +884,10 @@ public class MCReader {
      * then RESTORE from staging into the temp transfer buffer,
      * then TRANSFER to the destination value block.
      * Finally, restore the original content of the staging block.
-     * TODO: check if we have permission to write to staging block!
      *
-     * @return 0 on success; 2 if a block index is not inside its sector;
+     * @return 0 on success.
+     *         1 if writing to sector trailers or the manufacturer block
+     *         2 if a block index is not inside its sector.
      *        -1 on auth/IO errors.
      */
     public int valueTransferRestore(
@@ -895,8 +896,11 @@ public class MCReader {
         byte[] keyStage, boolean useKeyBStage,
         byte[] keyDest,  boolean useKeyBDest) {
 
+
         try {
-            mMFC.connect();
+            if (!isConnected()) {
+                mMFC.connect();
+            }
 
             // block numbers validation
             int stageBlocks = mMFC.getBlockCountInSector(stageSector);
@@ -905,8 +909,8 @@ public class MCReader {
             if (destBlock  < 0 || destBlock  >= destBlocks)  return 2;
 
             // safety against writing to trailer and manufacturer block safety
-            if (stageBlock == stageBlocks - 1 || (stageSector == 0 && stageBlock == 0)) return -1;
-            if (destBlock  == destBlocks - 1  || (destSector  == 0 && destBlock  == 0)) return -1;
+            if (stageBlock == stageBlocks - 1 || (stageSector == 0 && stageBlock == 0)) return 1;
+            if (destBlock  == destBlocks - 1  || (destSector  == 0 && destBlock  == 0)) return 1;
 
             int stageAbs = mMFC.sectorToBlock(stageSector) + stageBlock;
             int destAbs  = mMFC.sectorToBlock(destSector)  + destBlock;
@@ -919,6 +923,7 @@ public class MCReader {
 
             // save original content, from this block
             byte[] original = mMFC.readBlock(stageAbs);
+
 
             // write the prepared value block in correct format
             mMFC.writeBlock(stageAbs, valueBlock16);
