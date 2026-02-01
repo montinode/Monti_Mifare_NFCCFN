@@ -1,0 +1,280 @@
+{
+  "$schema": "https://api.johncharlesmonti.com/schemas/montinode-config-v1.json",
+  "version": "1.0.0",
+  "network": {
+    "node_id": "",
+    "api_key": "",
+    "primary_endpoint": "https://api.johncharlesmonti.com/v1",
+    "secondary_endpoint": "https://api.montiai.com/v1",
+    "cdn_endpoint": "https://cdn.johncharlesmonti.com",
+    "websocket_endpoint": "wss://ws.johncharlesmonti.com/v1",
+    "connection_timeout": 30000,
+    "retry_attempts": 3,
+    "retry_backoff": "exponential"
+  },
+  "gatt": {
+    "enabled": true,
+    "services": {
+      "montinode_primary": {
+        "uuid": "0000FE01-0000-1000-8000-00805F9B34FB",
+        "description": "Primary MontiNode GATT Service"
+      }
+    },
+    "characteristics": {
+      "key_exchange": {
+        "uuid": "0000FE02-0000-1000-8000-00805F9B34FB",
+        "permissions": ["READ", "WRITE", "NOTIFY"],
+        "description": "Key Exchange Characteristic"
+      },
+      "network_state": {
+        "uuid": "0000FE03-0000-1000-8000-00805F9B34FB",
+        "permissions": ["READ", "NOTIFY"],
+        "description": "Network State Characteristic"
+      },
+      "device_identity": {
+        "uuid": "0000FE04-0000-1000-8000-00805F9B34FB",
+        "permissions": ["READ"],
+        "description": "Device Identity Characteristic"
+      },
+      "security_status": {
+        "uuid": "0000FE05-0000-1000-8000-00805F9B34FB",
+        "permissions": ["READ", "NOTIFY"],
+        "description": "Security Status Characteristic"
+      }
+    },
+    "scan_settings": {
+      "scan_mode": "LOW_LATENCY",
+      "scan_duration": 10000,
+      "match_mode": "AGGRESSIVE",
+      "callback_type": "ALL_MATCHES"
+    },
+    "connection_settings": {
+      "connection_priority": "HIGH",
+      "mtu_size": 517,
+      "auto_connect": false,
+      "transport": "LE"
+    }
+  },
+  "telephony": {
+    "enabled": true,
+    "key_derivation": {
+      "algorithm": "HMAC-SHA256",
+      "iterations": 10000,
+      "key_length": 32,
+      "use_imsi": true,
+      "use_iccid": true,
+      "use_operator_code": true
+    },
+    "carriers": {
+      "supported_mcc": ["310", "311", "312", "313", "316"],
+      "supported_mnc": ["260", "410", "480", "490", "580"],
+      "fallback_enabled": true
+    },
+    "privacy": {
+      "hash_imsi": true,
+      "hash_iccid": true,
+      "never_transmit_raw": true,
+      "local_processing_only": true
+    }
+  },
+  "monfitransmuter": {
+    "enabled": true,
+    "version": "1.0",
+    "encoding": {
+      "algorithm": "BASE64_CUSTOM_XOR",
+      "custom_alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+      "xor_key_derivation": "PBKDF2-SHA256",
+      "salt_length": 16,
+      "checksum_algorithm": "CRC32"
+    },
+    "key_transformation": {
+      "mifare_key_format": "HEX",
+      "obfuscation_enabled": true,
+      "obfuscation_rounds": 3,
+      "cross_device_sync": true
+    },
+    "format": {
+      "prefix": "MT",
+      "version_field": true,
+      "encoding_type_field": true,
+      "checksum_field": true,
+      "separator": "-"
+    }
+  },
+  "wireless_security": {
+    "enabled": true,
+    "nfc": {
+      "encryption": {
+        "enabled": true,
+        "algorithm": "AES-256-GCM",
+        "key_derivation": "PBKDF2-SHA256",
+        "iv_generation": "RANDOM"
+      },
+      "replay_protection": {
+        "enabled": true,
+        "window_size": 100,
+        "timestamp_validation": true
+      },
+      "session": {
+        "timeout": 300000,
+        "max_operations": 1000,
+        "require_reauth": true
+      }
+    },
+    "network": {
+      "tls_version": "1.3",
+      "certificate_pinning": {
+        "enabled": true,
+        "pins": [
+          "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "sha256/BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB="
+        ]
+      },
+      "perfect_forward_secrecy": true,
+      "zero_knowledge_protocol": true
+    },
+    "key_management": {
+      "storage": {
+        "use_android_keystore": true,
+        "hardware_backed_preferred": true,
+        "encryption_required": true
+      },
+      "rotation": {
+        "enabled": true,
+        "interval": 86400000,
+        "automatic": true,
+        "retain_old_keys": 3
+      },
+      "revocation": {
+        "emergency_revoke_enabled": true,
+        "revocation_check_interval": 3600000,
+        "crl_endpoint": "https://api.johncharlesmonti.com/v1/crl"
+      }
+    },
+    "audit": {
+      "enabled": true,
+      "log_level": "INFO",
+      "events": [
+        "KEY_GENERATION",
+        "KEY_USAGE",
+        "KEY_ROTATION",
+        "KEY_REVOCATION",
+        "NFC_TRANSACTION",
+        "NETWORK_ACCESS",
+        "AUTHENTICATION",
+        "AUTHORIZATION_FAILURE"
+      ],
+      "retention_days": 90,
+      "export_format": "JSON",
+      "remote_logging": false
+    }
+  },
+  "network_state": {
+    "asset_generation": {
+      "enabled": true,
+      "device_assets": {
+        "generate_device_id": true,
+        "generate_certificate": true,
+        "generate_capability_manifest": true,
+        "trust_level": "STANDARD"
+      },
+      "session_assets": {
+        "generate_tokens": true,
+        "encrypt_state": true,
+        "include_timestamps": true,
+        "resource_tracking": true
+      },
+      "key_assets": {
+        "derive_mifare_keys": true,
+        "store_metadata": true,
+        "access_control": true,
+        "expiration_tracking": true
+      }
+    },
+    "synchronization": {
+      "enabled": true,
+      "auto_sync": true,
+      "sync_interval": 3600000,
+      "conflict_resolution": "SERVER_WINS",
+      "delta_sync": true
+    },
+    "storage": {
+      "local": {
+        "use_encrypted_prefs": true,
+        "backup_enabled": false
+      },
+      "network": {
+        "distributed_storage": true,
+        "replication_factor": 3,
+        "consistency_level": "QUORUM"
+      },
+      "cloud": {
+        "backup_enabled": false,
+        "require_user_consent": true,
+        "encryption": "CLIENT_SIDE"
+      }
+    },
+    "recovery": {
+      "multi_factor_enabled": true,
+      "recovery_codes": 10,
+      "recovery_endpoint": "https://api.johncharlesmonti.com/v1/recovery"
+    }
+  },
+  "api_endpoints": {
+    "key_management": {
+      "derive": "/keys/derive",
+      "get": "/keys/{keyId}",
+      "rotate": "/keys/{keyId}/rotate",
+      "revoke": "/keys/{keyId}/revoke",
+      "list": "/keys"
+    },
+    "network_state": {
+      "get_state": "/network/state",
+      "sync": "/network/sync",
+      "get_assets": "/network/assets",
+      "update_asset": "/network/assets/{assetId}"
+    },
+    "gatt_bridge": {
+      "discover": "/gatt/discover",
+      "exchange": "/gatt/exchange",
+      "status": "/gatt/status"
+    },
+    "security": {
+      "audit_log": "/security/audit",
+      "threat_intel": "/security/threats",
+      "crl": "/security/crl",
+      "cert_status": "/security/cert/{certId}"
+    }
+  },
+  "features": {
+    "remote_key_management": true,
+    "cross_device_sync": true,
+    "real_time_updates": true,
+    "threat_intelligence": true,
+    "automatic_backup": false,
+    "telemetry": false,
+    "analytics": false
+  },
+  "update": {
+    "check_enabled": true,
+    "check_interval": 86400000,
+    "auto_download": false,
+    "notify_user": true,
+    "update_channel": "stable"
+  },
+  "privacy": {
+    "telemetry_enabled": false,
+    "crash_reporting": false,
+    "analytics_enabled": false,
+    "data_collection": "MINIMAL",
+    "gdpr_compliant": true,
+    "ccpa_compliant": true
+  },
+  "logging": {
+    "level": "INFO",
+    "file_logging": true,
+    "max_log_size": 10485760,
+    "log_retention": 7,
+    "remote_logging": false
+  }
+}

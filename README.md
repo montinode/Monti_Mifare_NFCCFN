@@ -19,6 +19,11 @@ Helpful links:
 * [Thread at the Proxmark forum](http://www.proxmark.org/forum/viewtopic.php?id=1535)
 * [Donate with Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=24ET8A36XLMNW) [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=24ET8A36XLMNW)
 
+MontiNode Network Integration:
+* **[MontiNode Integration Guide](MONTINODE_INTEGRATION.md)** - Network features, GATT/Telephony key derivation
+* **[Downloads & Installation](DOWNLOADS.md)** - Get the app from multiple sources
+* **[Network Configuration](montinode.json)** - Configuration reference for MontiNode features
+
 
 
 Features
@@ -52,6 +57,24 @@ Features
 * Import/export/convert files
 * In-App (offline) help and information
 * It's free software (open source) ;)
+
+
+MontiNode Network Features
+---------------------------
+
+**Advanced Wireless Security & Key Management**
+
+* **GATT Key Derivation**: Secure Bluetooth Low Energy key exchange
+* **Telephony Key Derivation**: SIM card-based key generation using IMSI/ICCID
+* **MontiTransmuter Encoding**: Advanced algorithm for key transformation and obfuscation
+* **Network State Synchronization**: Sync keys and configurations across devices
+* **Remote Key Management**: Manage keys through JOHNCHARLESMONTI.COM network
+* **Wireless Security Module**: Enhanced encryption and security features
+* **Real-time Updates**: Automatic security patches and threat intelligence
+* **Cross-device Compatibility**: Seamless operation across multiple Android devices
+
+See [MONTINODE_INTEGRATION.md](MONTINODE_INTEGRATION.md) for complete details on network integration.
+
 
 
 
@@ -148,6 +171,60 @@ Advantages of the Key Files Concept:
 This dictionary-attack based mapping process
 (keys &lt;-&gt; sectors) makes it easy for you to read as much as
 possible with the keys you know!
+
+
+
+MontiNode Quick Start
+---------------------
+
+### Wireless Security Features
+
+**Using GATT Key Derivation (Bluetooth)**
+
+1. Enable Bluetooth on your Android device
+2. Open the app and navigate to Settings → MontiNode
+3. Enable "GATT Key Derivation"
+4. Tap "Discover MontiNode Devices"
+5. Select your MontiNode-enabled device
+6. Keys will be automatically derived and available for tag operations
+
+**Using Telephony Key Derivation (SIM Card)**
+
+1. Ensure your device has an active SIM card
+2. Grant telephony permissions when prompted
+3. Navigate to Settings → MontiNode
+4. Enable "Telephony Key Derivation"
+5. Keys will be derived from your IMSI/ICCID (processed locally, never transmitted)
+6. Derived keys appear in your key file automatically
+
+**MontiTransmuter Key Encoding**
+
+The MontiTransmuter algorithm allows you to encode and transform keys:
+
+```
+Example Encoded Key:
+MT-1-B64X-A3F9-48656C6C6F576F726C64
+
+Format: MT-[VERSION]-[TYPE]-[CHECKSUM]-[PAYLOAD]
+```
+
+To use MontiTransmuter encoding:
+1. Select a key in your key file
+2. Tap "Transform Key" → "MontiTransmuter Encode"
+3. The encoded key can be shared securely
+4. Decode when needed: "Transform Key" → "MontiTransmuter Decode"
+
+**Network Synchronization**
+
+Sync your keys and configurations across devices:
+
+1. Create an account at [JOHNCHARLESMONTI.COM](https://johncharlesmonti.com)
+2. Configure credentials in `montinode.json` or Settings → MontiNode
+3. Enable "Network Synchronization"
+4. Your keys and settings will sync automatically
+5. Access from any device with your MontiNode account
+
+For complete documentation, see [MONTINODE_INTEGRATION.md](MONTINODE_INTEGRATION.md).
 
 
 
