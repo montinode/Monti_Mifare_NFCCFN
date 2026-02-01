@@ -111,21 +111,21 @@
 
         function updateThreat(amount) {
             const threatDisp = document.getElementById('threat-val');
-            let current = parseInt(threatDisp.innerText);
+            let current = parseInt(threatDisp.innerText, 10);
             let newVal = Math.min(100, current + amount);
             threatDisp.innerText = newVal + "%";
             threatDisp.className = newVal > 50 ? 'status-crit' : 'status-ok';
             
             // Decay
             setTimeout(() => {
-                threatDisp.innerText = Math.max(0, parseInt(threatDisp.innerText) - 5) + "%";
+                threatDisp.innerText = Math.max(0, parseInt(threatDisp.innerText, 10) - 5) + "%";
             }, 2000);
         }
 
         // Animate Bars
         setInterval(() => {
             const bars = document.getElementsByClassName('bar');
-            const threat = parseInt(document.getElementById('threat-val').innerText);
+            const threat = parseInt(document.getElementById('threat-val').innerText, 10);
             for(let bar of bars) {
                 const h = Math.random() * (threat + 10);
                 bar.style.height = h + 'px';
@@ -138,8 +138,15 @@
             if (e.key === 'Enter') {
                 const cmd = this.value;
                 const log = document.getElementById('net-log');
-                log.innerHTML += `<div>>> USER COMMAND: ${cmd}</div>`;
-                log.innerHTML += `<div>>> EXECUTING...</div>`;
+                
+                const cmdLine = document.createElement('div');
+                cmdLine.textContent = '>> USER COMMAND: ' + cmd;
+                log.appendChild(cmdLine);
+                
+                const execLine = document.createElement('div');
+                execLine.textContent = '>> EXECUTING...';
+                log.appendChild(execLine);
+                
                 this.value = '';
                 log.scrollTop = log.scrollHeight;
             }
