@@ -361,6 +361,9 @@ public class MCReader {
      * <ul>
      * <li>0 - success</li>
      * <li>1 - block 0 data are not 16 bytes long</li>
+     * <li>2 - Invalid APDU response length</li>
+     * <li>3 - Warning: operation completed with issues (SW1=0x62)</li>
+     * <li>5 - APDU command failed with error status code</li>
      * <li>-1 - Something went wrong during the attempt to write block 0</li>
      * </ul>
      */
@@ -381,14 +384,45 @@ public class MCReader {
             mMFC.close();
             gen3Tag.connect();
             byte[] response = gen3Tag.transceive(fullCommand);
-            // TODO: check response for success.
+            
+            // Check APDU response status (ISO 7816-4 SW1/SW2 status bytes)
+            // For write commands, the response should typically contain only SW1 and SW2 (2 bytes)
+            if (response == null || response.length < 2) {
+                Log.e(LOG_TAG, "Invalid APDU response: null or too short");
+                gen3Tag.close();
+                mMFC.connect();
+                return 2;
+            }
+            
+            // Extract status bytes (last 2 bytes of response)
+            // For this write command, the response should be exactly 2 bytes (SW1/SW2)
+            int sw1 = response[response.length - 2] & 0xFF;
+            int sw2 = response[response.length - 1] & 0xFF;
+            int statusWord = (sw1 << 8) | sw2;
+            
             gen3Tag.close();
             mMFC.connect();
+            
+            // Check status codes according to ISO 7816-4
+            if (statusWord == 0x9000) {
+                // Success
+                return 0;
+            } else if (sw1 == 0x62) {
+                // Warning (0x6200-0x62FF): ISO 7816-4 indicates operation completed successfully
+                // but with warnings (e.g., state unchanged, file filled up by last write).
+                // Callers should treat this as a qualified success and check the specific SW2 value if needed.
+                Log.w(LOG_TAG, String.format("APDU warning: Operation completed with warnings (SW=0x%04X)", statusWord));
+                return 3;
+            } else {
+                // Error status code (including 0x61XX which shouldn't occur for write operations)
+                Log.e(LOG_TAG, String.format("APDU command failed with status: 0x%04X (SW1=0x%02X, SW2=0x%02X)", 
+                    statusWord, sw1, sw2));
+                return 5;
+            }
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error while writing block to tag.", e);
             return -1;
         }
-        return 0;
     }
 
     /**
