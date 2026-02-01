@@ -118,7 +118,20 @@ gattMonitor.cleanup();
 TelephonyKeyDeriver telephony = new TelephonyKeyDeriver(context);
 
 // Derive key from IMEI (requires READ_PHONE_STATE permission)
-DerivedKey imeiKey = telephony.deriveKeyFromIMEI(16); // 16 bytes = 128-bit AES
+DerivedKey imeiKey = null;
+try {
+    imeiKey = telephony.deriveKeyFromIMEI(16); // 16 bytes = 128-bit AES
+    
+    // Use the key...
+    if (imeiKey != null) {
+        WirelessSecurityManager.getInstance(context).storeKey(imeiKey);
+    }
+} finally {
+    // Always clear sensitive key data
+    if (imeiKey != null) {
+        imeiKey.clear();
+    }
+}
 
 // Derive key from SIM card
 DerivedKey simKey = telephony.deriveKeyFromSIM(32); // 32 bytes = 256-bit AES
@@ -291,7 +304,7 @@ Add these permissions to `AndroidManifest.xml`:
 
 1. **Key Storage**: Keys are stored in memory only. Consider using Android Keystore for persistent storage.
 
-2. **Memory Clearing**: All sensitive data is automatically cleared from memory when objects are finalized.
+2. **Memory Clearing**: Sensitive data must be explicitly cleared by calling the `clear()` method on `DerivedKey` objects when done. Always clear keys in finally blocks or use try-with-resources patterns.
 
 3. **Permission Handling**: Always check and request permissions at runtime for Android 6.0+.
 
@@ -311,13 +324,14 @@ Add these permissions to `AndroidManifest.xml`:
 
 ## Best Practices
 
-1. Always clear sensitive data after use
-2. Use multi-factor derivation when possible
-3. Implement key rotation policies
-4. Monitor audit logs for suspicious activity
-5. Request permissions dynamically
-6. Handle permission denials gracefully
-7. Store keys securely using Android Keystore API when available
+1. Always explicitly clear sensitive data after use by calling `derivedKey.clear()`
+2. Use try-finally blocks to ensure keys are cleared even on exceptions
+3. Use multi-factor derivation when possible
+4. Implement key rotation policies
+5. Monitor audit logs for suspicious activity
+6. Request permissions dynamically
+7. Handle permission denials gracefully
+8. Store keys securely using Android Keystore API when available
 8. Use HTTPS for network transmission of encoded keys
 9. Implement rate limiting for key derivation operations
 10. Test thoroughly on multiple Android versions
