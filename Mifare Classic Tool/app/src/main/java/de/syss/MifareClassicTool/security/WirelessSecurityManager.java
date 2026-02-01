@@ -48,7 +48,7 @@ import de.syss.MifareClassicTool.security.utils.CryptoUtils;
  * - Educational purposes
  * - Development and testing
  * 
- * @author Monti Security Team
+ * @author JOHNCHARLESMONTI
  */
 public class WirelessSecurityManager {
     private static final String LOG_TAG = WirelessSecurityManager.class.getSimpleName();

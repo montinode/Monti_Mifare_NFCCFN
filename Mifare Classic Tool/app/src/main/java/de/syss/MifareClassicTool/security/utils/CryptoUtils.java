@@ -33,7 +33,7 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * Cryptographic utility functions for key operations.
  * Provides AES, DES, and hash functions.
- * @author Monti Security Team
+ * @author JOHNCHARLESMONTI
  */
 public class CryptoUtils {
     private static final String LOG_TAG = CryptoUtils.class.getSimpleName();

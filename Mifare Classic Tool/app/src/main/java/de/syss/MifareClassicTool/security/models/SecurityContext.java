@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Security context for key derivation operations.
  * Contains state and configuration for security operations.
- * @author Monti Security Team
+ * @author JOHNCHARLESMONTI
  */
 public class SecurityContext {
     private final String contextId;

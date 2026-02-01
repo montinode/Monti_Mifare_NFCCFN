@@ -42,7 +42,7 @@ import de.syss.MifareClassicTool.security.utils.KeyDerivationUtils;
  * Intercepts and derives encryption keys from Bluetooth GATT communications.
  * Monitors GATT characteristic read/write for key exchange patterns.
  * Thread-safe with callback support.
- * @author Monti Security Team
+ * @author JOHNCHARLESMONTI
  */
 public class GattKeyExchange {
     private static final String LOG_TAG = GattKeyExchange.class.getSimpleName();

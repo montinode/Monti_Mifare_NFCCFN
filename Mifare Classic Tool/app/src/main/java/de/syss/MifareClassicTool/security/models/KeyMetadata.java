@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * Metadata associated with a derived key.
- * @author Monti Security Team
+ * @author JOHNCHARLESMONTI
  */
 public class KeyMetadata {
     public enum KeySource {

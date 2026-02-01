@@ -57,7 +57,7 @@ import de.syss.MifareClassicTool.security.utils.KeyDerivationUtils;
  * 
  * For production encryption, use Android Keystore to generate and store cryptographic keys.
  * 
- * @author Monti Security Team
+ * @author JOHNCHARLESMONTI
  */
 public class TelephonyKeyDeriver {
     private static final String LOG_TAG = TelephonyKeyDeriver.class.getSimpleName();

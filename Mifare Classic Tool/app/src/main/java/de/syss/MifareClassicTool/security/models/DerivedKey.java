@@ -22,7 +22,7 @@ import java.util.Arrays;
 /**
  * Represents a derived encryption key with metadata.
  * Keys can be derived from GATT, telephony, or other sources.
- * @author Monti Security Team
+ * @author JOHNCHARLESMONTI
  */
 public class DerivedKey {
     private final byte[] keyData;

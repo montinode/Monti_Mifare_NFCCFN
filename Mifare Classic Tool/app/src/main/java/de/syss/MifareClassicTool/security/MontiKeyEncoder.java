@@ -33,7 +33,7 @@ import de.syss.MifareClassicTool.security.utils.CryptoUtils;
  * Encodes derived keys into Monti-Network-State assets.
  * Converts encryption keys to squared Unicode representation and
  * generates secure key identifiers for network-safe transmission.
- * @author Monti Security Team
+ * @author JOHNCHARLESMONTI
  */
 public class MontiKeyEncoder {
     private static final String LOG_TAG = MontiKeyEncoder.class.getSimpleName();

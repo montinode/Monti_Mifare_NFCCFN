@@ -26,7 +26,7 @@ import java.util.Arrays;
 
 /**
  * Utilities for deriving encryption keys from various sources.
- * @author Monti Security Team
+ * @author JOHNCHARLESMONTI
  */
 public class KeyDerivationUtils {
     private static final String LOG_TAG = KeyDerivationUtils.class.getSimpleName();
