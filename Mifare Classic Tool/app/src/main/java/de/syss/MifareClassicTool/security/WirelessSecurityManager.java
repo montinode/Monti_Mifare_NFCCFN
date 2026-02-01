@@ -221,20 +221,28 @@ public class WirelessSecurityManager {
             switch (algorithm) {
                 case AES_128:
                 case AES_256:
-                    byte[] iv = CryptoUtils.generateAESIV();
-                    byte[] encrypted = CryptoUtils.encryptAES(data, key.getKeyData(), iv);
+                    byte[] aesIv = CryptoUtils.generateAESIV();
+                    byte[] encrypted = CryptoUtils.encryptAES(data, key.getKeyData(), aesIv);
                     
                     // Prepend IV to encrypted data
                     if (encrypted != null) {
-                        result = new byte[iv.length + encrypted.length];
-                        System.arraycopy(iv, 0, result, 0, iv.length);
-                        System.arraycopy(encrypted, 0, result, iv.length, encrypted.length);
+                        result = new byte[aesIv.length + encrypted.length];
+                        System.arraycopy(aesIv, 0, result, 0, aesIv.length);
+                        System.arraycopy(encrypted, 0, result, aesIv.length, encrypted.length);
                     }
                     break;
                     
                 case DES:
                 case TRIPLE_DES:
-                    result = CryptoUtils.encryptDES(data, key.getKeyData());
+                    byte[] desIv = CryptoUtils.generateDESIV();
+                    byte[] desEncrypted = CryptoUtils.encryptDES(data, key.getKeyData(), desIv);
+                    
+                    // Prepend IV to encrypted data
+                    if (desEncrypted != null) {
+                        result = new byte[desIv.length + desEncrypted.length];
+                        System.arraycopy(desIv, 0, result, 0, desIv.length);
+                        System.arraycopy(desEncrypted, 0, result, desIv.length, desEncrypted.length);
+                    }
                     break;
                     
                 default:
@@ -287,14 +295,23 @@ public class WirelessSecurityManager {
                         return null;
                     }
                     
-                    byte[] iv = Arrays.copyOfRange(data, 0, 16);
+                    byte[] aesIv = Arrays.copyOfRange(data, 0, 16);
                     byte[] encryptedData = Arrays.copyOfRange(data, 16, data.length);
-                    result = CryptoUtils.decryptAES(encryptedData, key.getKeyData(), iv);
+                    result = CryptoUtils.decryptAES(encryptedData, key.getKeyData(), aesIv);
                     break;
                     
                 case DES:
                 case TRIPLE_DES:
-                    result = CryptoUtils.decryptDES(data, key.getKeyData());
+                    // Extract IV from beginning of data (DES uses 8-byte IV)
+                    if (data.length < 8) {
+                        Log.e(LOG_TAG, "Data too short to contain DES IV");
+                        logOperation("DECRYPT", keyId, false, "Invalid data length");
+                        return null;
+                    }
+                    
+                    byte[] desIv = Arrays.copyOfRange(data, 0, 8);
+                    byte[] desEncryptedData = Arrays.copyOfRange(data, 8, data.length);
+                    result = CryptoUtils.decryptDES(desEncryptedData, key.getKeyData(), desIv);
                     break;
                     
                 default:

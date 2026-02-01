@@ -92,6 +92,7 @@ public class DerivedKey {
 
     /**
      * Clear the key data from memory.
+     * Call this explicitly when done with the key.
      */
     public void clear() {
         Arrays.fill(keyData, (byte) 0);
@@ -105,11 +106,5 @@ public class DerivedKey {
                 ", timestamp=" + timestamp +
                 ", metadata=" + metadata +
                 '}';
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        clear();
-        super.finalize();
     }
 }

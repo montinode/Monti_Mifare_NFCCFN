@@ -113,16 +113,18 @@ public class CryptoUtils {
     }
 
     /**
-     * Encrypt data using DES.
+     * Encrypt data using DES with CBC mode.
      * @param data Data to encrypt
      * @param key DES key (8 bytes)
+     * @param iv Initialization vector (8 bytes)
      * @return Encrypted data or null on error
      */
-    public static byte[] encryptDES(byte[] data, byte[] key) {
+    public static byte[] encryptDES(byte[] data, byte[] key, byte[] iv) {
         try {
             SecretKeySpec keySpec = new SecretKeySpec(key, "DES");
-            Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+            Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+            cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
             return cipher.doFinal(data);
         } catch (Exception e) {
             Log.e(LOG_TAG, "Error encrypting with DES", e);
@@ -131,21 +133,31 @@ public class CryptoUtils {
     }
 
     /**
-     * Decrypt data using DES.
+     * Decrypt data using DES with CBC mode.
      * @param data Data to decrypt
      * @param key DES key (8 bytes)
+     * @param iv Initialization vector (8 bytes)
      * @return Decrypted data or null on error
      */
-    public static byte[] decryptDES(byte[] data, byte[] key) {
+    public static byte[] decryptDES(byte[] data, byte[] key, byte[] iv) {
         try {
             SecretKeySpec keySpec = new SecretKeySpec(key, "DES");
-            Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, keySpec);
+            Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+            cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
             return cipher.doFinal(data);
         } catch (Exception e) {
             Log.e(LOG_TAG, "Error decrypting with DES", e);
             return null;
         }
+    }
+
+    /**
+     * Generate a random IV for DES (8 bytes).
+     * @return Random IV
+     */
+    public static byte[] generateDESIV() {
+        return randomBytes(8);
     }
 
     /**
