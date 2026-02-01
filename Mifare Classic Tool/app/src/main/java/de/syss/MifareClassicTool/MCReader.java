@@ -388,7 +388,7 @@ public class MCReader {
             // Check APDU response status (ISO 7816-4 SW1/SW2 status bytes)
             // For write commands, the response should typically contain only SW1 and SW2 (2 bytes)
             if (response == null || response.length < 2) {
-                Log.e(LOG_TAG, "Invalid APDU response: response too short");
+                Log.e(LOG_TAG, "Invalid APDU response: null or too short");
                 gen3Tag.close();
                 mMFC.connect();
                 return 2;
@@ -408,9 +408,10 @@ public class MCReader {
                 // Success
                 return 0;
             } else if (sw1 == 0x62) {
-                // Warning: operation completed with possible issues (0x6200-0x62FF)
-                // This may indicate the write succeeded but with some warnings
-                Log.w(LOG_TAG, String.format("APDU warning: Operation completed with issues (SW=0x%04X)", statusWord));
+                // Warning (0x6200-0x62FF): ISO 7816-4 indicates operation completed successfully
+                // but with warnings (e.g., state unchanged, file filled up by last write).
+                // Callers should treat this as a qualified success and check the specific SW2 value if needed.
+                Log.w(LOG_TAG, String.format("APDU warning: Operation completed with warnings (SW=0x%04X)", statusWord));
                 return 3;
             } else {
                 // Error status code (including 0x61XX which shouldn't occur for write operations)
