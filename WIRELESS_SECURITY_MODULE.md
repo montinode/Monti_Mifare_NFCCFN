@@ -1,5 +1,8 @@
 # Wireless Security Module Documentation
 
+## Author
+**JOHN CHARLES MONTI** - Wireless Security Module Development (2026)
+
 ## Overview
 
 The Wireless Security Module enhances Monti_Mifare_NFCCFN with advanced security capabilities for deriving, managing, and encoding encryption keys from multiple sources including Bluetooth GATT communications and telephony data.

@@ -1,5 +1,6 @@
 /*
  * Copyright 2013 Gerhard Klostermeier
+ * Copyright 2026 JOHN CHARLES MONTI
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

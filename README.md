@@ -51,6 +51,10 @@ Features
 * Quick UID clone feature
 * Import/export/convert files
 * In-App (offline) help and information
+* **Wireless Security Module** - GATT-based key exchange and telephony-derived encryption  
+  (See [WIRELESS_SECURITY_MODULE.md](WIRELESS_SECURITY_MODULE.md) for details)
+* **Monti.000.monti Compatibility** - Embedded software systems integration  
+  (See [MONTI_COMPATIBILITY.md](MONTI_COMPATIBILITY.md) for details)
 * It's free software (open source) ;)
 
 
@@ -157,6 +161,10 @@ License
 This application was originally developed by
 Gerhard Klostermeier in cooperation with SySS GmbH and Aalen
 University ([www.htw-aalen.de](http://www.htw-aalen.de/)) in 2012/2013.
+
+The Wireless Security Module and Monti.000.monti compatibility layer were developed by
+**JOHN CHARLES MONTI** in 2026.
+
 It is free software and licensed under the
 [GNU General Public License v3.0 (GPLv3)](https://www.gnu.org/licenses/gpl-3.0.txt)
 
