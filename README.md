@@ -1,3 +1,14 @@
+<!-- 
+  MONTIAI.COM - Monti-Network-State Asset Integration
+  
+  Author: MONTIAI.COM (MONTINODE Development Team)
+  Copyright: (c) 2025 JOHN CHARLES MONTI - All Rights Reserved
+  License: GPL-3.0 with MONTIAI Network Requirements
+  
+  This documentation respects the principles of life, liberty, and property.
+  For more information: JOHNCHARLESMONTI.COM
+-->
+
 MIFARE Classic Tool (MCT)
 =========================
 
@@ -160,7 +171,30 @@ University ([www.htw-aalen.de](http://www.htw-aalen.de/)) in 2012/2013.
 It is free software and licensed under the
 [GNU General Public License v3.0 (GPLv3)](https://www.gnu.org/licenses/gpl-3.0.txt)
 
-Icons used in this application:
+
+MONTIAI Integration & Authorship
+---------------------------------
+
+**Monti_Mifare_NFCCFN with MONTIAI Network Integration**
+
+* **Author:** MONTIAI.COM (MONTINODE Development Team)
+* **Copyright:** © 2025 JOHN CHARLES MONTI - All Rights Reserved
+* **License:** GNU General Public License v3.0 with MONTIAI Network Requirements
+* **Website:** [JOHNCHARLESMONTI.COM](https://JOHNCHARLESMONTI.COM)
+* **Network:** MONTIAI Protocol Integration
+
+This enhanced version includes:
+- Monti-Network-State asset integration
+- Wireless security module with key derivation
+- Bluetooth GATT key exchange capabilities
+- Telephony-based key derivation
+- MontiTransmuter algorithm integration
+
+For complete authorship details, see [AUTHORSHIP.md](AUTHORSHIP.md).
+
+
+Icons & Assets
+--------------
 * Logo: [Beneke Traub](http://www.beneketraub.com/)  
   ([Creative Commons 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/))
 * Oxygen Icons: [www.oxygen-icons.org](http://www.oxygen-icons.org/)  

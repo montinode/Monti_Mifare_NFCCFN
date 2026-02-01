@@ -1,3 +1,14 @@
+<!-- 
+  MONTIAI.COM - Monti-Network-State Asset Integration
+  
+  Author: MONTIAI.COM (MONTINODE Development Team)
+  Copyright: (c) 2025 JOHN CHARLES MONTI - All Rights Reserved
+  License: GPL-3.0 with MONTIAI Network Requirements
+  
+  This documentation respects the principles of life, liberty, and property.
+  For more information: JOHNCHARLESMONTI.COM
+-->
+
 # Wireless Security Module Documentation
 
 ## Overview
