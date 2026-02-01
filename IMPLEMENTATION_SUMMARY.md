@@ -1,5 +1,8 @@
 # MONTI-WAVE Wireless Security Module Implementation Summary
 
+## Author
+**JOHN CHARLES MONTI** - Wireless Security Module Development (2026)
+
 ## Overview
 Successfully implemented comprehensive wireless security capabilities for Monti_Mifare_NFCCFN scanner with GATT-based key interception, telephony-derived encryption, and secure key management.
 
