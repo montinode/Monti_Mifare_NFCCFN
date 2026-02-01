@@ -93,6 +93,10 @@ public class DerivedKey {
     /**
      * Clear the key data from memory.
      * Call this explicitly when done with the key.
+     * 
+     * Note: This provides best-effort memory clearing. The JIT compiler may optimize
+     * away the clearing operation. For maximum security, consider using additional
+     * techniques or relying on Android Keystore for key storage.
      */
     public void clear() {
         Arrays.fill(keyData, (byte) 0);

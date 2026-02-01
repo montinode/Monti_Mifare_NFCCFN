@@ -44,6 +44,19 @@ import de.syss.MifareClassicTool.security.utils.KeyDerivationUtils;
  * Generates encryption keys from cellular/phone data.
  * Extracts key material from phone state, SIM, and signal strength.
  * Supports multi-factor key combination with secure random injection.
+ * 
+ * ⚠️ SECURITY WARNING: Telephony-derived keys have low entropy and are predictable.
+ * Keys derived from IMEI, SIM, phone number, or signal strength can be reconstructed
+ * by attackers with access to this information. Signal strength is highly variable
+ * and unsuitable for cryptographic key derivation.
+ * 
+ * These methods are intended for:
+ * - Security research and analysis
+ * - Legacy system compatibility
+ * - Educational purposes
+ * 
+ * For production encryption, use Android Keystore to generate and store cryptographic keys.
+ * 
  * @author Monti Security Team
  */
 public class TelephonyKeyDeriver {

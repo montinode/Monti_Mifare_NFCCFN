@@ -205,6 +205,16 @@ public class GattKeyExchange {
      * @param uuid Characteristic UUID
      * @param data Raw data
      */
+    /**
+     * Analyze data for key exchange patterns.
+     * 
+     * Note: This simple length-based heuristic may produce false positives,
+     * intercepting non-key data that happens to be 6, 16, 24, or 32 bytes long.
+     * Applications should validate intercepted keys before use.
+     * 
+     * @param uuid Characteristic UUID
+     * @param data Raw data
+     */
     private void analyzeForKeyPattern(UUID uuid, byte[] data) {
         // Notify listeners of potential key exchange
         for (KeyExchangeListener listener : listeners) {
@@ -212,6 +222,7 @@ public class GattKeyExchange {
         }
 
         // Check for common key lengths (128-bit, 192-bit, 256-bit AES, 48-bit MIFARE)
+        // WARNING: This may intercept non-key data of the same length
         if (data.length == 6 || data.length == 16 || data.length == 24 || data.length == 32) {
             deriveKeyFromGattData(uuid, data);
         }

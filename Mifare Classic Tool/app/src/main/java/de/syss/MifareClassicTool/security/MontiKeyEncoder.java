@@ -163,8 +163,8 @@ public class MontiKeyEncoder {
                 int value = c - UNICODE_BASE;
                 
                 if (value < 0 || value >= UNICODE_RANGE) {
-                    // Fallback for out-of-range characters
-                    value = value % UNICODE_RANGE;
+                    // Fallback for out-of-range characters - handle negative modulo properly
+                    value = ((value % UNICODE_RANGE) + UNICODE_RANGE) % UNICODE_RANGE;
                 }
                 
                 result[i] = (byte) (value & 0xFF);

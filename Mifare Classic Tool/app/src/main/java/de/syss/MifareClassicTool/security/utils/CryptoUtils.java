@@ -59,8 +59,15 @@ public class CryptoUtils {
     /**
      * Generate a random DES key (64-bit key with 56-bit effective strength).
      * DES uses 64-bit keys where 8 bits are parity bits, resulting in 56 bits of effective key strength.
+     * 
+     * ⚠️ SECURITY WARNING: DES is cryptographically broken and deprecated since 1999.
+     * It can be broken in hours with modern hardware. Use AES-256 instead.
+     * This method is provided only for legacy system compatibility and security research.
+     * 
      * @return Random DES key bytes (8 bytes)
+     * @deprecated Use AES encryption instead
      */
+    @Deprecated
     public static byte[] generateDESKey() {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("DES");
@@ -115,11 +122,17 @@ public class CryptoUtils {
 
     /**
      * Encrypt data using DES with CBC mode.
+     * 
+     * ⚠️ SECURITY WARNING: DES is cryptographically broken and deprecated since 1999.
+     * Use AES encryption instead. This method is provided only for legacy compatibility.
+     * 
      * @param data Data to encrypt
      * @param key DES key (8 bytes)
      * @param iv Initialization vector (8 bytes)
      * @return Encrypted data or null on error
+     * @deprecated Use AES encryption instead
      */
+    @Deprecated
     public static byte[] encryptDES(byte[] data, byte[] key, byte[] iv) {
         try {
             SecretKeySpec keySpec = new SecretKeySpec(key, "DES");
@@ -135,11 +148,17 @@ public class CryptoUtils {
 
     /**
      * Decrypt data using DES with CBC mode.
+     * 
+     * ⚠️ SECURITY WARNING: DES is cryptographically broken and deprecated since 1999.
+     * Use AES encryption instead. This method is provided only for legacy compatibility.
+     * 
      * @param data Data to decrypt
      * @param key DES key (8 bytes)
      * @param iv Initialization vector (8 bytes)
      * @return Decrypted data or null on error
+     * @deprecated Use AES encryption instead
      */
+    @Deprecated
     public static byte[] decryptDES(byte[] data, byte[] key, byte[] iv) {
         try {
             SecretKeySpec keySpec = new SecretKeySpec(key, "DES");

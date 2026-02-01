@@ -302,6 +302,24 @@ Add these permissions to `AndroidManifest.xml`:
 
 ## Security Considerations
 
+### Critical Security Warnings
+
+⚠️ **This module is designed for security research and analysis purposes. The following security considerations must be understood:**
+
+1. **Telephony-Derived Keys Have Low Entropy**: Keys derived from IMEI, SIM, phone number, or signal strength are predictable and not suitable for production encryption. An attacker with access to this information can reconstruct your keys. Use Android Keystore for production key generation.
+
+2. **DES is Cryptographically Broken**: DES encryption was deprecated in 1999 and can be broken in hours with modern hardware. It is included only for legacy system compatibility and analysis. **Never use DES for new implementations.** Use AES-256 instead.
+
+3. **No Authenticated Encryption**: The current AES implementation uses CBC mode without HMAC authentication, making it vulnerable to padding oracle attacks and ciphertext manipulation. For production use, implement AES-GCM or add HMAC-SHA256 authentication.
+
+4. **Memory Clearing is Best-Effort**: The JIT compiler may optimize away memory clearing operations. The `clear()` method provides best-effort security but cannot guarantee memory is wiped on all platforms.
+
+5. **GATT Key Detection May Have False Positives**: The system assumes any GATT data of certain lengths (6, 16, 24, 32 bytes) is an encryption key. This may intercept non-key data. Validate intercepted keys before use.
+
+6. **Android 12+ Bluetooth Permissions**: Apps must target API 31+ and request BLUETOOTH_CONNECT at runtime on Android 12+ devices. The legacy BLUETOOTH and BLUETOOTH_ADMIN permissions are restricted starting from Android 12.
+
+### General Security Guidelines
+
 1. **Key Storage**: Keys are stored in memory only. Consider using Android Keystore for persistent storage.
 
 2. **Memory Clearing**: Sensitive data must be explicitly cleared by calling the `clear()` method on `DerivedKey` objects when done. Always clear keys in finally blocks or use try-with-resources patterns.

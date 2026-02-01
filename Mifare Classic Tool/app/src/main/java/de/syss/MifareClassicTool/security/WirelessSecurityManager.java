@@ -35,6 +35,19 @@ import de.syss.MifareClassicTool.security.utils.CryptoUtils;
  * Stores and retrieves derived keys securely with support for multiple
  * encryption algorithms and key versioning.
  * Thread-safe with comprehensive audit logging.
+ * 
+ * ⚠️ SECURITY WARNING: The current encryption implementation uses AES-CBC without
+ * message authentication (HMAC). This makes it vulnerable to padding oracle attacks
+ * and ciphertext manipulation. For production use:
+ * - Implement AES-GCM for authenticated encryption
+ * - Or add HMAC-SHA256 authentication over IV and ciphertext
+ * - Or use Android Keystore's encryption capabilities
+ * 
+ * This implementation is suitable for:
+ * - Security research and analysis
+ * - Educational purposes
+ * - Development and testing
+ * 
  * @author Monti Security Team
  */
 public class WirelessSecurityManager {
