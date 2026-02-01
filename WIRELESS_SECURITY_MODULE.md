@@ -318,7 +318,7 @@ Add these permissions to `AndroidManifest.xml`:
 
 - **AES-128**: 128-bit AES encryption
 - **AES-256**: 256-bit AES encryption
-- **DES**: 56-bit DES encryption
+- **DES**: 64-bit keys with 56-bit effective strength (8 parity bits)
 - **3DES**: Triple DES encryption
 - **MIFARE Classic**: 48-bit MIFARE keys
 
@@ -332,9 +332,9 @@ Add these permissions to `AndroidManifest.xml`:
 6. Request permissions dynamically
 7. Handle permission denials gracefully
 8. Store keys securely using Android Keystore API when available
-8. Use HTTPS for network transmission of encoded keys
-9. Implement rate limiting for key derivation operations
-10. Test thoroughly on multiple Android versions
+9. Use HTTPS for network transmission of encoded keys
+10. Implement rate limiting for key derivation operations
+11. Test thoroughly on multiple Android versions
 
 ## Troubleshooting
 

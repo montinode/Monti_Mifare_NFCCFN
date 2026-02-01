@@ -57,8 +57,9 @@ public class CryptoUtils {
     }
 
     /**
-     * Generate a random DES key.
-     * @return Random DES key bytes
+     * Generate a random DES key (64-bit key with 56-bit effective strength).
+     * DES uses 64-bit keys where 8 bits are parity bits, resulting in 56 bits of effective key strength.
+     * @return Random DES key bytes (8 bytes)
      */
     public static byte[] generateDESKey() {
         try {
