@@ -1,3 +1,19 @@
+/**
+ * MONTIAI.COM - Monti-Network-State Asset Integration
+ * 
+ * @author MONTIAI.COM (MONTINODE Development Team)
+ * @copyright 2025 JOHN CHARLES MONTI - All Rights Reserved
+ * @license GPL-3.0 with MONTIAI Network Requirements
+ * 
+ * This software respects the principles of:
+ * - Life: No malicious code; research & education focused
+ * - Liberty: Open source; freedom to study & modify  
+ * - Property: JOHN CHARLES MONTI copyright protected
+ * - MONTIAI Network: Integration & authorization protocols
+ * 
+ * For more information: JOHNCHARLESMONTI.COM
+ */
+
 /*
  * Copyright 2013 Gerhard Klostermeier
  *
