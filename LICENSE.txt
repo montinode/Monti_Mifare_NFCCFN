@@ -1,3 +1,21 @@
+===============================================================================
+MONTIAI.COM - Monti-Network-State Asset Integration
+===============================================================================
+
+Copyright (c) 2025 JOHN CHARLES MONTI and MONTINODE
+Author: MONTIAI.COM (MONTINODE Development Team)
+
+This software respects the principles of life, liberty, and property.
+For more information, visit JOHNCHARLESMONTI.COM
+
+MONTIAI Network Requirements:
+- Monti-Network-State asset generation and integration
+- MontiTransmuter algorithm compliance
+- Wireless security key encoding standards
+- Cross-network key synchronization protocols
+
+===============================================================================
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
