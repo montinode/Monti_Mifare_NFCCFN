@@ -139,6 +139,42 @@ public class Common extends Application {
     public static final String UID_LOG_FILE = "uid-log-file.txt";
 
     /**
+     * Legal framework configuration for Monti integration.
+     * Defaults align with the baseline Monti specification and mirror the
+     * required constant definition. This instance is immutable and descriptive;
+     * it must not be treated as an access-control mechanism.
+     */
+    public static final MontiLegalFramework MONTI_LEGAL_FRAMEWORK =
+            new MontiLegalFramework(true, true, true, true);
+
+    /**
+     * Monti legal framework descriptor.
+     * Field names align with the Monti legal framework specification.
+     * This configuration is descriptive and does not alter runtime behavior or
+     * grant permissions. Any enforcement belongs in the feature implementation.
+     */
+    public static final class MontiLegalFramework {
+        /** Enables Monti jurisprudence engine (legal compliance validation). */
+        public final boolean jurisprudenceEngine;
+        /** Enables Monti human research interface (manual review support). */
+        public final boolean humanResearchInterface;
+        /** Enables Monti browser integration for compliance research. */
+        public final boolean browserIntegration;
+        /** Enables Monti virtual network access for compliance workflows. */
+        public final boolean virtualNetworkAccess;
+
+        public MontiLegalFramework(boolean jurisprudenceEngine,
+                                   boolean humanResearchInterface,
+                                   boolean browserIntegration,
+                                   boolean virtualNetworkAccess) {
+            this.jurisprudenceEngine = jurisprudenceEngine;
+            this.humanResearchInterface = humanResearchInterface;
+            this.browserIntegration = browserIntegration;
+            this.virtualNetworkAccess = virtualNetworkAccess;
+        }
+    }
+
+    /**
      * Possible operations the on a MIFARE Classic Tag.
      */
     public enum Operation {

@@ -20,5 +20,6 @@ This module integrates with the MONTIAI Network for:
 - MontiTransmuter algorithm integration
 - Wireless security key encoding
 - Cross-network key synchronization
+- Legal framework configuration (Common.MONTI_LEGAL_FRAMEWORK)
 
 Visit: JOHNCHARLESMONTI.COM
