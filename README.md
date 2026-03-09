@@ -5,6 +5,10 @@
 ![Protocol](https://img.shields.io/badge/PROTOCOL-MIFARE_CLASSIC-blue?style=for-the-badge)
 ![License](https://img.shields.io/badge/LICENSE-GPLv3-red?style=for-the-badge)
 
+<a href="https://play.google.com/store/apps/details?id=de.syss.MifareClassicTool"><img src="metadata/common/assets/google-play-badge.png" alt="Download from Play Store" height="80"></a>
+<a href="https://f-droid.org/packages/de.syss.MifareClassicTool/"><img src="metadata/common/assets/fdroid-badge.png" alt="Download from F-Droid" height="80"></a>
+<a href="https://www.icaria.de/mct/releases/"><img src="metadata/common/assets/direct-apk-download-badge.png" alt="Direct APK Download" height="80"></a>
+
 **ACCESS THE PHYSICAL SUBSTRATE.**
 This Android terminal allows for the reading, writing, analysis, and cloning of MIFARE Classic RFID assets. It serves as the bridge between the **MontiNode Network** and physical access tokens.
 
